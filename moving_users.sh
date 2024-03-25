@@ -9,26 +9,26 @@ create_user_and_permissions() {
     # Set password for user
     echo "$username:$password" | chpasswd
 
-    # Add users to the "sftp_users" group
-    sudo usermod -aG sftpusers "$username"
+    # Add users to the "sftp" group
+    sudo usermod -aG sftp "$username"
 
     #Prevent SSH
     sudo usermod --shell /sbin/nologin "$username"
 
     # Set directory permissions for the user
-    sudo mkdir -p /sftpusers/chroot/"$username"/data
-    sudo chown root:sftpusers /sftpusers/chroot/"$username"
-    sudo chown "$username":sftpusers /sftpusers/chroot/"$username"/data
-    sudo chmod 750 /sftpusers/chroot/"$username"
-    sudo chmod 770 /sftpusers/chroot/"$username"/data
+    sudo mkdir -p /sftp/chroot/"$username"/data
+    sudo chown root:sftp /sftp/chroot/"$username"
+    sudo chown "$username":sftp /sftp/chroot/"$username"/data
+    sudo chmod 750 /sftp/chroot/"$username"
+    sudo chmod 770 /sftp/chroot/"$username"/data
 
-    sudo mkdir -p /sftpusers/sftpHold/"$username"/data
-    sudo chown root:sftpusers /sftpusers/sftpHold/"$username"/data
-    sudo chmod 750 /sftpusers/sftpHold/"$username"
-    sudo chmod 770 /sftpusers/sftpHold/"$username"/data
+    sudo mkdir -p /sftp/sftpHold/"$username"/data
+    sudo chown root:sftp /sftp/sftpHold/"$username"/data
+    sudo chmod 750 /sftp/sftpHold/"$username"
+    sudo chmod 770 /sftp/sftpHold/"$username"/data
 
     # Confirmation
-    echo "User '$username' has been created and added to the 'sftp_users' group with directory permissions set."
+    echo "User '$username' has been created and added to the 'sftp' group with directory permissions set."
 }
 
 # Add multiple users
