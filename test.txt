@@ -1,7 +1,0 @@
-total 14
--rwxr-xr-x 1 benmc 197609 2230 Apr  2 13:13 htb_academy.sh
--rw-r--r-- 1 benmc 197609 1321 Mar 24 20:56 moving_users.sh
--rwxr-xr-x 1 benmc 197609  217 Apr  3 15:02 network.py
--rw-r--r-- 1 benmc 197609  779 Mar 27 13:37 README.md
--rw-r--r-- 1 benmc 197609  304 Apr  3 15:55 Subprocess.py
--rw-r--r-- 1 benmc 197609    0 Apr  4 08:52 test.txt
