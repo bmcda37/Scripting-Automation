@@ -44,12 +44,12 @@ def creating_users_permissions(username, password):
         run(["sudo", "chown", "root:sftp", f"/sftp/chroot/{username}"], check=True)
         run(["sudo", "chown" f"{username}:sftp /sftp/chroot/{username}/data"], check=True)
         run(["sudo", "chmod 750", f"/sftp/chroot/{username}"], check=True)
-        run(["sudo", "chmod 770", f"/sftp/chroot/{username}/data"], check=True)
+        run(["sudo", "chmod", "770", f"/sftp/chroot/{username}/data"], check=True)
         
         run(["sudo", "mkdir", "-p", f"/sftp/sftpHold/{username}/data"], check=True)
         run(["sudo", "chown", "root:sftp", f"/sftp/sftpHold/{username}/data"], check=True)
-        run(["sudo", "chmod", "750" f"/sftp/sftpHold/{username}"], check=True)
-        run(["sudo", "chmod", "770", f"/sftp/sftpHold/{username}/data"] check=True)
+        run(["sudo", "chmod", "750", f"/sftp/sftpHold/{username}"], check=True)
+        run(["sudo", "chmod", "770", f"/sftp/sftpHold/{username}/data"], check=True)
         
         print(f"User {username} has been created and added to the 'sftp' group with directory permissions set.")
         return True
