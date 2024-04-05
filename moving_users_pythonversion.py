@@ -42,8 +42,8 @@ def creating_users_permissions(username, password):
         
         run(["sudo", "mkdir", "-p", f"/sftp/chroot/{username}/data"], check=True)
         run(["sudo", "chown", "root:sftp", f"/sftp/chroot/{username}"], check=True)
-        run(["sudo", "chown" f"{username}:sftp /sftp/chroot/{username}/data"], check=True)
-        run(["sudo", "chmod 750", f"/sftp/chroot/{username}"], check=True)
+        run(["sudo", "chown", f"{username}:sftp /sftp/chroot/{username}/data"], check=True)
+        run(["sudo", "chmod", "750", f"/sftp/chroot/{username}"], check=True)
         run(["sudo", "chmod", "770", f"/sftp/chroot/{username}/data"], check=True)
         
         run(["sudo", "mkdir", "-p", f"/sftp/sftpHold/{username}/data"], check=True)
