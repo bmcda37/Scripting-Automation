@@ -6,4 +6,4 @@ The purpose of this Bash script is to allow for the admin to enter the username,
 
 ## HTB Academy Script:
 
-This script contains all the answers to the Hack the Box Academy Bash Scripting module. Each commented-out section is a different answer to a question within the module.
+This script contains all the answers to the Hack the Box Academy Bash Scripting module. Each commented-out section contains the question and answer within the module.
