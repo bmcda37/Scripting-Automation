@@ -7,3 +7,8 @@ The purpose of this Bash script is to allow for the admin to enter the username,
 ## HTB Academy Script:
 
 This script contains all the answers to the Hack the Box Academy Bash Scripting module. Each commented-out section contains the question and answer within the module.
+
+
+## CVE Scripts:
+
+These scripts are used to resolve some CVE's that were discovered with my home lab.
