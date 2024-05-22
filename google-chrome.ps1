@@ -1,7 +1,20 @@
+
+
+# Function to check if a process is running
+function IsProcessRunning {
+    param (
+        [string]$ProcessName
+    )
+    $process = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
+    return $process -ne $null
+}
+
 # Path to Google Update executable
 $GoogleUpdatePath = "C:Program Files (x86)\Google\Update\GoogleUpdate.exe"
 
 $ChromePath = "C:Program Files\Google\Chrome\Application\chrome.exe"
+
+$ChromeRunning = IsProcessRunning "chrome"
 
 # If Chrome is running, close it
 if ($ChromeRunning) {
