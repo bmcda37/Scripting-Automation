@@ -6,7 +6,7 @@ function IsProcessRunning {
         [string]$ProcessName
     )
     $process = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
-    return $process -ne $null
+    return $null -ne $process
 }
 
 # Path to Google Update executable
