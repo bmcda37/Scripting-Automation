@@ -1,7 +1,7 @@
 # Path to Google Update executable
 $GoogleUpdatePath = "C:Program Files (x86)\Google\Update\GoogleUpdate.exe"
 
-$ChromePath = "C:ProgramFiles(x86)\Google\Chrome\Application\chrome.exe"
+$ChromePath = "C:Program Files\Google\Chrome\Application\chrome.exe"
 
 # If Chrome is running, close it
 if ($ChromeRunning) {
