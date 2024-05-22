@@ -6,6 +6,8 @@ SLEEP="60"
 
 sudo dnf install -y dnf-automatic
 
+sudo dnf update -y
+
 sed -i "s/upgrade_type = .*/upgrade_type = $UPGRADE_TYPE/" $CONFIG_FILE
 
 sed -i "s/random_sleep = .*/random_sleep = $SLEEP/" $CONFIG_FILE
