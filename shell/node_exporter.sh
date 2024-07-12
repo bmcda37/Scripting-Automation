@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 node_service="/usr/lib/systemd/system/node_exporter.service"
 
