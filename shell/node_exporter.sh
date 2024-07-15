@@ -2,6 +2,13 @@
 
 node_service="/usr/lib/systemd/system/node_exporter.service"
 
+dnf install tar -y
+
+sudo firewall-cmd --permanent --add-port=9100/tcp
+
+sudo firewall-cmd --reload
+
+
 if [ -f "$node_service" ]; then
     echo "Node Exporter is already installed"
     exit 1
@@ -11,7 +18,7 @@ else
     sudo groupadd -f node_exporter
     sudo useradd -g node_exporter --no-create-home --shell /bin/false node_exporter
     sudo mkdir /etc/node_exporter
-    sudo chown node_exporter:node_exporter /etc/node_exporter
+    sudo chown -R node_exporter:node_exporter /etc/node_exporter
 
     sudo wget  https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
     sudo tar -xvf node_exporter-1.8.1.linux-amd64.tar.gz
@@ -46,5 +53,8 @@ EOL
     systemctl start node_exporter
     systemctl enable node_exporter.service
     systemctl status node_exporter
+
+    sudo firewall-cmd --list-all
+
 
 fi
