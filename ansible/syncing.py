@@ -2,7 +2,6 @@
 
 import configparser
 import os
-import subprocess
 import shutil
 
 #Create a folder for any new groups in host
