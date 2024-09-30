@@ -1,0 +1,156 @@
+#!/bin/bash
+
+#Script created by Ben McDaniel
+
+
+LOGFILE="./setup-summary.log"
+tools=("nmap" "wireshark" "tcpdump")
+TCP_INPORTS=("80" "443" "53")
+TCP_OUTPORTS=("80" "443" "53")
+
+
+
+log(){
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a $LOGFILE
+}
+
+
+init_check(){
+  #Check that script is being run as root
+  if [ "$EUID" -ne 0 ]; then
+    log "Please run as root"
+    exit 1
+  else
+    sudo apt update && sudo apt upgrade -y 
+    log "Checking for updates and upgrading the system"
+  fi
+
+}
+
+
+tool_install(){
+
+  #Loop through the tools array and check if the package is installed.
+  for i in "${tools[@]}"; do
+    
+    #If package is found, this will evaluate to true, but produce no output.
+    if dpkg -l | grep -q "^ii  ${i}"; then
+
+      sudo apt update && sudo apt upgrade -y ${i}
+      log "Package ${i} was already installed on the machine, only updating the application."
+      
+      cron "${i}"  
+
+    #If package is not found, install the package & print successful message to log file.
+    else
+      sudo apt install -y "${i}"
+
+      cron "${i}"
+
+      log "Package ${i} was successfully installed"
+
+    fi
+  done
+}
+
+cron(){
+  local i=$1
+  WEEKLY_UPD="0 0 * * 7 sudo apt update && sudo apt upgrade -y ${i}"
+
+  if ! crontab -l | grep -qF "${WEEKLY_UPD}"; then
+
+    (crontab -l 2>/dev/null; echo "${WEEKLY_UPD}") | crontab -
+    log "Cron job added for ${i}"
+
+  else
+    log "Cron job for ${i} not added...already exists"
+  fi
+}
+
+
+#Configure Firewall
+firewall_config(){
+  
+
+  sudo apt install ufw -y
+  sudo systemctl start ufw
+  sudo ufw logging low
+
+  sed -i 's/IPV6=yes/IPV6=no/' /etc/default/ufw
+
+
+  if [ $? -ne 0 ]; then
+    log "Failed to install ufw."
+    return 1
+  
+  else
+    log "ufw is successfully installed."
+    
+    input_rules
+    output_rules
+    forward_rules
+
+  fi
+
+  #Reload the firewall rules
+  sudo ufw enable
+  sudo ufw reload
+  log "reloding & enabling the firewall rules."
+
+} 
+
+
+input_rules(){
+
+  sudo ufw default deny incoming
+  
+
+  for port in "${TCP_INPORTS[@]}"; do
+    sudo ufw allow in ${port}
+    log "Allowing incoming traffic on port ${port}"
+
+  done
+  #Set all rules not in TCP_INPORTS to DROP
+  log "Setting default policy to DENY for INPUT chain"
+
+}
+
+output_rules(){
+  
+  sudo ufw default deny outgoing
+
+  for port in "${TCP_OUTPORTS[@]}"; do
+    sudo  ufw allow out ${port}
+    log "Allowing outgoing traffic on port ${port}"
+  done
+  
+  log  "Setting default policy to DENY for OUTPUT chain"
+
+}
+
+
+forward_rules(){
+  #Drop all Forward traffic
+  sudo ufw default deny FORWARD
+  log "Setting default policy to DROP for FORWARD chain"
+
+}
+
+
+
+main(){  
+
+  #Check if the script is being run as root and inital update and upgrade
+  init_check
+
+  #Install the tools and create a weekly update cron job for each tool pulling in cron function
+  tool_install
+
+  #Pull in each function for firewall chain and install iptables-persistent save rules
+  firewall_config
+
+  echo "Installation complete, logs can be found at $LOGFILE for more information"
+}
+
+
+main
