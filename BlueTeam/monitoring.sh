@@ -95,7 +95,7 @@ comp_time(){
 #Send High alert to the admin via temporary slack channel created for assingment
 high_alert(){
     local offending_ip=$1
-    curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Threshold exceeded for: $offending_ip. IP was successfully blocked in the firewall.\"}" https://hooks.slack.com/services/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 
+    curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"Threshold exceeded for: $offending_ip. IP was successfully blocked in the firewall.\"}" <INSERT-SLACK-WEBHOOK>
 }
 
 #Send watch alert to the admin via temporary slack channel created for assingment.
